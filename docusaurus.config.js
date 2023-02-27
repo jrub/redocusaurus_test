@@ -106,50 +106,58 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Developers',
             items: [
               {
-                label: 'Guides',
-                to: '/docs/intro',
+                label: 'Guides (comming soon)',
+                to: '/',
               },
               {
                 label: 'API Reference',
-                to: '/api',
+                to: '/', // '/api'
+              },
+              {
+                label: 'Quaderno connect',
+                href: 'https://quaderno.notion.site/Quaderno-Connect-0994ef66ef264136a2087f7f2b0c3b3b',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Tax resources',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Quaderno Blog',
+                href: 'https://www.quaderno.io/blog',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Free Tax Guides',
+                href: 'https://www.quaderno.io/digital-tax-guides',
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Sales Tax Calculator',
+                href: 'https://www.quaderno.io/sales-tax-calculator',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Company',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'About Quaderno',
+                to: 'https://www.quaderno.io/about-quaderno',
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: 'Support Center',
+                href: 'https://support.quaderno.io',
+              },
+              {
+                label: 'Status',
+                href: 'https://quaderno.statuspage.io',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} Quaderno. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
