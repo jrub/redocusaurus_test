@@ -52,7 +52,7 @@ const config = {
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          //customCss: require.resolve('./src/css/custom.css'),
         },
       }),
     ],
@@ -63,8 +63,8 @@ const config = {
         // Plugin Options for loading OpenAPI files
         specs: [
           {
+            id: 'test',
             spec: 'openapi/openapi.yaml',
-            route: '/api/',
           },
         ],
         // Theme Options for modifying how redoc renders them
