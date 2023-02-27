@@ -82,24 +82,12 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Quaderno developers',
+        title: 'Quaderno API Reference',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Quaderno Logo',
           src: 'img/quaderno_icon_full_color.png',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Guides',
-          },
-          { to: '/api', label: 'API Reference', position: 'left' },
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
-          },
         ],
       },
       footer: {
