@@ -1,0 +1,3563 @@
+---
+openapi: '3.1'
+info:
+  title: Quaderno API
+  version: v20220325
+tags:
+- name: API features
+  description:
+    $ref: https://raw.githubusercontent.com/quaderno/quaderno-api/master/source/includes/_setup.md
+  x-traitTag: true
+- name: Contacts
+- name: Products
+- name: Tax IDs
+- name: Custom Tax Rates
+- name: Tax Jurisdictions
+- name: Tax Codes
+- name: Evidence
+- name: Invoices
+- name: Credits
+- name: Expenses
+- name: Recurring Documents
+- name: Sessions
+- name: Coupons
+- name: Transactions
+- name: Reporting
+- name: Webhooks
+x-tagGroups:
+- name: Quaderno API
+  tags:
+  - API features
+- name: Core
+  tags:
+  - Contacts
+  - Products
+- name: Taxes
+  tags:
+  - Tax IDs
+  - Custom Tax Rates
+  - Tax Jurisdictions
+  - Tax Codes
+  - Evidence
+- name: Billing
+  tags:
+  - Invoices
+  - Credits
+  - Expenses
+  - Recurring Documents
+  - Document Items
+  - Attachments
+  - Payments
+- name: Checkout
+  tags:
+  - Sessions
+  - Coupons
+- name: Connect
+  tags:
+  - Accounts
+paths:
+  "/accounts/{id}":
+    get:
+      summary: Retrieve a custom account
+      tags:
+      - Accounts
+      description: Retrieves the details of an existing Quaderno Connect custom account.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the custom account to retrieve.
+        example: 41
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/custom_account"
+    put:
+      summary: Update a custom account
+      tags:
+      - Accounts
+      description: Updates the details of an existing Quaderno Connect custom account.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the custom account to retrieve.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/custom_account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/custom_account"
+        required: true
+  "/accounts/{id}/activate":
+    put:
+      summary: Activate a custom account
+      tags:
+      - Accounts
+      description: Activates a Quaderno Connect custom account.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the custom account to activate.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/custom_account"
+  "/accounts/{id}/deactivate":
+    put:
+      summary: Deactivate a custom account
+      tags:
+      - Accounts
+      description: Deactivates a Quaderno Connect custom account.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the custom account to deactivate.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/custom_account"
+  "/accounts":
+    post:
+      summary: Create a custom account
+      tags:
+      - Accounts
+      description: Creates a new Quaderno Connect custom account.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/custom_account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/custom_account"
+        required: true
+    get:
+      summary: List all accounts
+      tags:
+      - Accounts
+      description: Retrieves a list of all Quaderno Connect accounts.
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/custom_account"
+  "/contacts":
+    get:
+      summary: List contacts
+      tags:
+      - Contacts
+      description: Lists contacts, paginated and sorted by creation date (newest first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters the contact list based on the contact's full name, email
+          or tax id. Case-sensitive.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/contact"
+    post:
+      summary: Create a contact
+      tags:
+      - Contacts
+      description: Creates a new contact, representing a customer or vendor who appears
+        on invoices, credit notes, and expenses.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/contact"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/contact"
+  "/contacts/{id}":
+    get:
+      summary: Retrieve a contact
+      tags:
+      - Contacts
+      description: Retrieves the details of an existing contact.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the desired contact.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/contact"
+    put:
+      summary: Update a contact
+      tags:
+      - Contacts
+      description: Updates a contact. Any parameters not provided will be left unchanged.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the contact to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/contact"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/contact"
+    delete:
+      summary: Delete a contact
+      tags:
+      - Contacts
+      description: Permanently deletes a contact. This action cannot be undone.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the contact to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/{payment_processor}/customers/{processor_id}":
+    get:
+      summary: Retrieve a contact from a payment processor
+      tags:
+      - Contacts
+      description: Retrieves a customer contact linked to a payment processor
+      parameters:
+      - name: payment_processor
+        in: path
+        required: true
+        description: Payment processor name. Can be stripe, paypal, gocardless and
+          braintree.
+        schema:
+          type: string
+      - name: processor_id
+        in: path
+        required: true
+        description: The ID the `payment_processor` assigned to the contact.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve_by_pp
+        '401':
+          description: retrieve_by_pp_not_found
+  "/checkout/coupons":
+    get:
+      summary: List all coupons
+      tags:
+      - Coupons
+      description: Lists all coupons, sorted by creation date (newest first).
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/coupon"
+    post:
+      summary: Create a coupon
+      tags:
+      - Coupons
+      description: Creates a new coupon, which represents a discount.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/coupon"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/coupon"
+  "/Coupons/coupons/{id}":
+    get:
+      summary: Retrieve a coupon
+      tags:
+      - Coupons
+      description: Retrieves the details of an existing coupon.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired coupon.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/coupon"
+    put:
+      summary: Update a coupon
+      tags:
+      - Coupons
+      description: Updates a coupon. Any parameters not provided will be left unchanged.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the coupon to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/coupon"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/coupon"
+    delete:
+      summary: Delete a coupon
+      tags:
+      - Coupons
+      description: Permanently deletes a coupon. This action cannot be undone.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the coupon to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/credits":
+    get:
+      summary: List all credit notes
+      tags:
+      - Credits
+      description: Lists all credit notes, paginated and sorted by creation date (newest
+        first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters a credit notes list based on the credit number, customer
+          name or PO number.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Filters a credit notes list based on the issue date. A date range
+          must be entered. Allowed formats are `2019-01-01,2019-12-31` and `2019/01/01,2019/12/31`.
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - outstanding
+          - late
+          - uncollectible
+          - paid
+          - refunded
+          - archived
+        description: 'Filters a credit notes list based on the credit state: `outstanding`,
+          `late`, `uncollectible`, `paid`, `refunded`, and `archived`.'
+      responses:
+        '200':
+          description: filter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/credit"
+    post:
+      summary: Create a credit note to cancel out an invoice
+      tags:
+      - Credits
+      description: Creates a new credit note that cancels out an existing invoice.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/credit"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+        required: true
+  "/credits/{id}":
+    get:
+      summary: Retrieve a credit note
+      tags:
+      - Credits
+      description: Retrieves the details of an existing credit note.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired credit.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/credit"
+    put:
+      summary: Update a credit note
+      tags:
+      - Credits
+      description: Updates a non-final credit, which are those not yet issued.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the credit to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/credit"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/credit"
+    delete:
+      summary: Deleting credit notes is not allowed
+      tags:
+      - Credits
+      description: Per tax compliance, credit notes cannot be deleted. To cancel out
+        a credit, please mark it as void.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of a credit.
+        required: true
+        schema:
+          type: string
+      responses:
+        '410':
+          description: no_delete
+  "/credits/{id}/void":
+    put:
+      summary: Void a credit note
+      tags:
+      - Credits
+      description: Voids a credit note, effectively canceling it.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the credit to be voided.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: void
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/credit"
+  "/credits/{id}/deliver":
+    get:
+      summary: Deliver a credit
+      tags:
+      - Credits
+      description: Delivers a credit to your customer via email.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired credit.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: deliver
+  "/expenses":
+    get:
+      summary: List all expenses
+      tags:
+      - Expenses
+      description: Lists all expenses, paginated and sorted by creation date (newest
+        first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters an expenses list based on the expense number, customer
+          name or PO number.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Filters an expenses list based on the issue date. A date range
+          must be entered. Allowed formats are `2019-01-01,2019-12-31` and `2019/01/01,2019/12/31`.
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        description: 'Filters an expenses list based on the expense state: `outstanding`,
+          `late` and `paid`.'
+        schema:
+          type: string
+          enum:
+          - outstanding
+          - late
+          - paid
+      - name: contact
+        in: query
+        required: false
+        description: Filters an expenses list based on the customer ID.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: filter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/invoice"
+    post:
+      summary: Create an expense
+      tags:
+      - Expenses
+      description: Creates a new expense.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/invoice"
+  "/expenses/{id}":
+    get:
+      summary: Retrieve an expense
+      tags:
+      - Expenses
+      description: Retrieves the details of an existing expense.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired expense.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+    put:
+      summary: Update an expense
+      tags:
+      - Expenses
+      description: Updates an expense.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the expense to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/invoice"
+    delete:
+      summary: Delete an expense
+      tags:
+      - Expenses
+      description: Deletes an existing expense.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the expense to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/invoices":
+    get:
+      summary: List all invoices
+      tags:
+      - Invoices
+      description: Lists all invoices, paginated and sorted by creation date (newest
+        first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters an invoices list based on the invoice number, customer
+          name or PO number.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Filters an invoices list based on the issue date. A date range
+          must be entered. Allowed formats are `2019-01-01,2019-12-31` and `2019/01/01,2019/12/31`.
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        enum:
+        - outstanding
+        - late
+        - uncollectible
+        - paid
+        - refunded
+        - archived
+        description: 'Filters an invoices list based on the invoice state: `outstanding`,
+          `late`, `uncollectible`, `paid`, `refunded`, and `archived`.'
+        schema:
+          type: string
+      - name: contact
+        in: query
+        required: false
+        description: Filters an invoices list based on the customer ID.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: filter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/invoice"
+    post:
+      summary: Create a invoice
+      tags:
+      - Invoices
+      description: Creates a new invoice object.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/invoice"
+  "/invoices/{id}":
+    get:
+      summary: Retrieve an invoice
+      tags:
+      - Invoices
+      description: Retrieves the details of an existing invoice. You need only supply
+        the unique invoice identifier that was returned upon invoice creation.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired invoice.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+    put:
+      summary: Update an invoice
+      tags:
+      - Invoices
+      description: Updates a non-final invoice, which are those not yet issued.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the invoice to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/invoice"
+    delete:
+      summary: Deleting invoices is not allowed
+      tags:
+      - Invoices
+      description: Per tax compliance, invoices cannot be deleted. To cancel out an
+        invoice, please issue a credit note.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of an invoice.
+        required: true
+        schema:
+          type: string
+      responses:
+        '410':
+          description: no_delete
+  "/invoices/{id}/deliver":
+    get:
+      summary: Deliver an invoice
+      tags:
+      - Invoices
+      description: Delivers an invoice to your customer via email.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired invoice.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: deliver
+  "/ping":
+    get:
+      summary: "/ping"
+      tags:
+      - Tools
+      responses:
+        '200':
+          description: status ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  "/items":
+    get:
+      summary: List products
+      tags:
+      - Products
+      description: Lists all products, paginated and sorted by creation date (newest
+        first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters a product list based on the product's name or code. Case-sensitive.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/product"
+    post:
+      summary: Create a product
+      tags:
+      - Products
+      description: Creates a new product, which could be used as line item on invoices,
+        credit notes and expenses.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/product"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/product"
+  "/items/{id}":
+    get:
+      summary: Retrieve a product
+      tags:
+      - Products
+      description: Retrieves the details of an existing product.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the desired product.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/product"
+    put:
+      summary: Update a product
+      tags:
+      - Products
+      description: Updates a product. Any parameters not provided will be left unchanged.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the product to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/product"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/product"
+    delete:
+      summary: Delete a product
+      tags:
+      - Products
+      description: Permanently deletes a product. This action cannot be undone.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the product to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/recurring":
+    get:
+      summary: List all recurring
+      tags:
+      - Recurring Documents
+      description: Lists all recurring, paginated and sorted by creation date (newest
+        first).
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: Filters a recurring list based on the recurring number, customer
+          name or PO number.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Filters a recurring list based on the issue date. A date range
+          must be entered. Allowed formats are `2019-01-01,2019-12-31` and `2019/01/01,2019/12/31`.
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        enum:
+        - active
+        - archived
+        description: Filters a recurring list based on the recurring state.
+        schema:
+          type: string
+      - name: contact
+        in: query
+        required: false
+        description: Filters a recurring list based on the customer ID.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: filter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/recurring"
+    post:
+      summary: Create a recurring
+      tags:
+      - Recurring Documents
+      description: Creates a new recurring.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/recurring"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/recurring"
+  "/recurring/{id}":
+    get:
+      summary: Retrieve a recurring
+      tags:
+      - Recurring Documents
+      description: Retrieves the details of an existing recurring.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired recurring.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/recurring"
+    put:
+      summary: Update a recurring
+      tags:
+      - Recurring Documents
+      description: Updates a recurring.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the recurring to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/recurring"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/recurring"
+    delete:
+      summary: Delete a recurring
+      tags:
+      - Recurring Documents
+      description: Deletes an existing recurring.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the recurring to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/checkout/sessions":
+    get:
+      summary: List all sessions
+      tags:
+      - Sessions
+      description: Lists all your Quaderno Checkout sessions, paginated and sorted
+        by creation date (newest first).
+      parameters:
+      - name: status
+        in: query
+        description: Filters a session based on the session's status.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/session"
+    post:
+      summary: Create a session
+      tags:
+      - Sessions
+      description: Creates a new Quaderno Checkout session object.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/session"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/session"
+  "/checkout/sessions/{id}":
+    get:
+      summary: Retrieve a session
+      tags:
+      - Sessions
+      description: Retrieves the details of an existing session.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired session.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/session"
+    put:
+      summary: Update a session
+      tags:
+      - Sessions
+      description: Updates a session. Any parameters not provided will be left unchanged.
+        Only `pending` sessions can be updated.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the session to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/session"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/session"
+    delete:
+      summary: Delete a session
+      tags:
+      - Sessions
+      description: Permanently deletes a session. This action cannot be undone. Only
+        `pending` sessions can be deleted.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the session to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/tax_codes/{id}":
+    get:
+      summary: Retrieve a tax code
+      tags:
+      - Tax Codes
+      description: Retrieves a tax code, which classify goods and services for tax
+        purposes.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the tax code to retrieve.
+        example: eservice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  description:
+                    type: string
+                  name:
+                    type: string
+  "/tax_codes":
+    get:
+      summary: List all tax code
+      tags:
+      - Tax Codes
+      description: Retrieves the list of supported tax codes.
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    description:
+                      type: string
+                    name:
+                      type: string
+  "/tax_ids":
+    get:
+      summary: List tax IDs
+      tags:
+      - Tax IDs
+      description: Lists all registered tax IDs.
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/tax_id"
+    post:
+      summary: Create a tax ID
+      tags:
+      - Tax IDs
+      description: Registers a new tax ID representing a business and associates it
+        to a specific tax jurisdiction.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/tax_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jurisdiction_id:
+                  type: string
+                  description: ID of the tax jurisdiction where the tax ID is registered.
+                value:
+                  type: string
+                  description: Value of the tax ID. For instance, a VAT number.
+                valid_from:
+                  type: string
+                  required: false
+                  description: The tax ID's validity date. Defaults to the beginning
+                    of the year.
+  "/tax_ids/{id}":
+    get:
+      summary: Retrieve a tax ID
+      tags:
+      - Tax IDs
+      description: Retrieves the details of an existing tax ID.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the desired tax ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/tax_id"
+    put:
+      summary: Update a tax ID
+      tags:
+      - Tax IDs
+      description: Updates a tax ID. Any parameters not provided will be left unchanged.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the tax ID to be updated.
+        required: true
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/tax_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/tax_id"
+    delete:
+      summary: Delete a tax ID
+      tags:
+      - Tax IDs
+      description: Permanently deletes a tax ID. This action cannot be undone.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the tax ID to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+  "/tax_ids/validate":
+    get:
+      summary: Validate a tax id
+      tags:
+      - Tax IDs
+      description: The result can be `true` (valid tax ID, meaning it represents a
+        business), `false` (invalid tax ID) or `null` (the external validation service
+        is temporarily unavailable).
+      parameters:
+      - name: country
+        in: query
+        required: true
+        description: Tax ID's registration country, represented as 2-letter ISO 3166-1
+          code.
+        schema:
+          type: string
+      - name: tax_id
+        in: query
+        description: The tax ID to be validated.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the result of the validation if the call succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+  "/jurisdictions/{id}":
+    get:
+      summary: Retrieve a jurisdiction
+      tags:
+      - Tax Jurisdictions
+      description: Retrieves a tax jurisdiction (area subject to its own tax regulations).
+      parameters:
+      - name: id
+        in: path
+        description: ID of the desired jurisdiction.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  country:
+                    type: string
+                  region:
+                    type: string
+  "/jurisdictions":
+    get:
+      summary: List all jurisdiction
+      tags:
+      - Tax Jurisdictions
+      description: Retrieves the list of all tax jurisdictions (areas subject to its
+        own tax regulations).
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: Case-sensitive filter based on the jurisdiction's country 2-letter
+          ISO 3166-1 code.
+        schema:
+          type: string
+      - name: region
+        in: query
+        required: false
+        description: |-
+          Case-sensitive filter based on the jurisdiction's region.
+                            Accepts the special string `none` to return jurisdictions that specifically have no region.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    country:
+                      type: string
+                    region:
+                      type: string
+  "/tax_rates/calculate":
+    get:
+      summary: Calculate a tax rate
+      tags:
+      - Tax Calculations
+      description: Calculates the applicable tax rate for a given address and transaction
+        type.
+      parameters:
+      - name: from_country
+        in: query
+        required: false
+        description: The seller's country. 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+          Defaults to the account's `country`.
+        schema:
+          type: string
+      - name: from_postal_code
+        in: query
+        required: false
+        description: The seller's ZIP or postal code. Defaults to the account's `postal
+          code`.
+        schema:
+          type: string
+      - name: to_country
+        in: query
+        required: true
+        description: The customer's country. 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+        schema:
+          type: string
+      - name: to_postal_code
+        in: query
+        description: The customer's ZIP or postal code.
+        schema:
+          type: string
+      - name: to_city
+        in: query
+        description: The customer's city. Only for US sales tax.
+        schema:
+          type: string
+      - name: tax_id
+        in: query
+        required: false
+        description: The customer's tax ID. Quaderno can validate VAT/GST numbers
+          from the EU, United Kingdom, Switzerland, Québec (Canada), Australia, and
+          New Zealand.
+        schema:
+          type: string
+      - name: tax_code
+        in: query
+        required: false
+        enum:
+        - consulting
+        - eservice
+        - ebook
+        - saas
+        - standard
+        - reduced
+        - exempt
+        description: The transaction's tax code. Tax codes can be obtained via GET
+          /tax_codes. Defaults to the account's default `tax code`.
+        schema:
+          type: string
+      - name: tax_behavior
+        in: query
+        required: false
+        enum:
+        - inclusive
+        - exclusive
+        description: Specifies whether the price is considered inclusive of taxes
+          or exclusive of taxes. Can be inclusive or exclusive. Defaults to exclusive.
+        schema:
+          type: string
+      - name: product_type
+        in: query
+        required: false
+        enum:
+        - good
+        - service
+        description: Specifies whether the product is a good or a service. Can be
+          good or service. Defaults to the account's default.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: The transaction's date. Default is today.
+        schema:
+          type: string
+      - name: amount
+        in: query
+        required: false
+        description: The transaction's amount.
+        schema:
+          type: string
+      - name: currency
+        in: query
+        required: false
+        description: The transaction's currency. Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+          in uppercase. Important to calculate taxes for overseas goods sold directly
+          to customers in UK. Default is the account`s `default currency`.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a tax rate object if the call succeeded.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/tax_rate"
+  "/transactions":
+    post:
+      summary: Create a transaction
+      tags:
+      - Transactions
+      description: Creates a new sale or refund transaction.
+      parameters: []
+      responses:
+        '201':
+          description: create_refund
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/invoice"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/transaction"
+  "/webhooks":
+    get:
+      summary: List all webhooks
+      tags:
+      - Webhooks
+      description: Lists all webhooks, sorted by creation date (newest first).
+      responses:
+        '200':
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/webhook"
+    post:
+      summary: Create a webhook
+      tags:
+      - Webhooks
+      description: Creates a new webhook object. The `url` provided needs to respond
+        to `HEAD` requests to validate the callback endpoint.
+      parameters: []
+      responses:
+        '201':
+          description: create
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/webhook"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/webhook"
+  "/webhooks/{id}":
+    get:
+      summary: Retrieve a webhook
+      tags:
+      - Webhooks
+      description: Retrieves the details of an existing webhook.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the desired webhook.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: retrieve
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/webhook"
+    put:
+      summary: Update a webhook
+      tags:
+      - Webhooks
+      description: Updates the specified webhook.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the webhook to be updated.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: update
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/webhook"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/webhook"
+    delete:
+      summary: Delete a webhook
+      tags:
+      - Webhooks
+      description: Deletes a webhook. This action cannot be undone.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the webhook to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: delete
+servers:
+- url: https://{customerId}.quadernoapp.com/api
+  description: Production server (uses live data)
+  variables:
+    customerId:
+      default: demo
+      description: You Quaderno account subdomain
+- url: https://{customerId}.sandbox-quadernoapp.com/api
+  description: Sandbox server (uses test data)
+  variables:
+    customerId:
+      default: demo
+      description: You Quaderno Sandbox account subdomain
+components:
+  schemas:
+    product:
+      type: object
+      description: Products describe the specific goods or services you offer to your
+        customers. You can use them in your invoices and checkout links.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        code:
+          type: string
+          description: 'The product’s SKU (Stock Keeping Unit) describe specific product
+            variations, taking into account any combination of: attributes, currency,
+            and cost.'
+          example: '012345678901-MFN'
+        country:
+          type: string
+          nullable: true
+          description: 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+            Required if `tax_based_on` is `country`.
+          example: US
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        currency:
+          type: string
+          nullable: true
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase. Must be a supported currency in your payment processors.
+          example: USD
+        description:
+          type: string
+          nullable: true
+          description: The product’s description, meant to be displayable to the customer.
+            Use this field to optionally store a long form explanation of the product
+            being sold for your own rendering purposes.
+        paypal_interval_duration:
+          type: integer
+          nullable: true
+          description: Only for `subscriptions`. Number of times the charge should
+            recur.
+          example: 1
+        paypal_interval_frequency:
+          type: integer
+          nullable: true
+          description: Only for PayPal `subscriptions`. The number of intervals between
+            subscription billings.
+        paypal_interval_unit:
+          type: string
+          enum:
+          - daily
+          - weekly
+          - monthly
+          - yearly
+          default: monthly
+          description: Only for PayPal `subscriptions`. Specifies billing frequency.
+          example: monthly
+        kind:
+          type: string
+          enum:
+          - one_off
+          - subscription
+          default: one_off
+          description: 'The type of transaction: one-off purchase or subscription.'
+        name:
+          type: string
+          description: The product’s name, meant to be displayable to the customer.
+          example: Ruby Essentials
+        product_type:
+          type: string
+          enum:
+          - good
+          - service
+          default: service
+          description: The type of the product. The product is either a tangible `good`
+            or a `service`.
+        stripe_plan_id:
+          type: string
+          nullable: true
+          description: Only for Stripe `subscriptions`. ID of the Stripe price related
+            to the subscription.
+          example: price_1GtYUvKYlo3Dy5yXgrQS
+        tax_based_on:
+          type: string
+          enum:
+          - customer_country
+          - country
+          default: customer_country
+          description: 'How taxes are going to be calculated: based on the customer
+            country or a particular country.'
+        tax_class:
+          type: string
+          enum:
+          - eservice
+          - ebook
+          - saas
+          - standard
+          - reduced
+          default: eservice
+          description: The tax class that applies to the product.
+        tax_type:
+          type: string
+          enum:
+          - excluded
+          - included
+          default: included
+          description: Specify if taxes are included or excluded in the `unit_cost`.
+        unit_cost:
+          type: string
+          description: The unit amount to be charged
+          example: '9.99'
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/products/92732431
+        stock:
+          type: string
+          nullable: true
+          description: The stock of the physical product.
+          example: '10'
+      required:
+      - id
+      - code
+      - description
+      - name
+      - product_type
+      - unit_cost
+      - stock
+      - tax_class
+      - kind
+      - tax_type
+      - tax_based_on
+    contact:
+      type: object
+      description: Any customer or vendor who appears on your invoices, credit notes,
+        and expenses.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        city:
+          type: string
+          nullable: true
+          description: City/District/Suburb/Town/Village.
+          example: Pasadena
+        contact_person:
+          type: string
+          nullable: true
+          description: If the contact is a `company`, this is its contact person.
+        country:
+          type: string
+          description: 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+          example: US
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: 1648037653
+        department:
+          type: string
+          nullable: true
+          description: If the contact is a `company`, this is the deparment.
+        discount:
+          oneOf:
+          - type: number
+            format: float
+          - type: 'null'
+          description: Default discount for this contact.
+          example: 0
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: The contact's email address
+          example: leonard@gmail.com
+        first_name:
+          type: string
+          description: The contact's first name. Only if the contact is a `person`.
+          example: Leonard
+        full_name:
+          type: string
+          description: The contact's full name.
+          example: Leonard Hofstadter
+        kind:
+          type: string
+          enum:
+          - company
+          - person
+          default: company
+          description: The type of contact.
+          example: person
+        language:
+          type: string
+          description: The contact's preferred language. 2-letter [ISO language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+            Should be included in the account's translations list.
+          example: EN
+        last_name:
+          type: string
+          nullable: true
+          description: The contact's last name. Only if the contact is a `person`.
+          example: Hofstadter
+        notes:
+          type: string
+          nullable: true
+          description: Internal notes about the contact.
+          example: Some private notes about the contact.
+        phone_1:
+          type: string
+          nullable: true
+          description: The contact's phone number.
+          example: 202-555-0104
+        postal_code:
+          type: string
+          nullable: true
+          description: ZIP or postal code.
+          example: '91104'
+        processor:
+          type: string
+          nullable: true
+          description: The external platform where the contact was imported from,
+            if applicable.
+          example: stripe
+        processor_id:
+          type: string
+          nullable: true
+          description: The ID the `payment_processor` assigned to the contact.
+          example: cus_999999999999
+        permalink:
+          type: string
+          format: uri
+          description: The URL for the hosted billing area, where customers can download
+            their invoices and update their billing details.
+          readOnly: true
+          example: https://quadernoapp.com/billing/123345abcdef67890
+        region:
+          type: string
+          nullable: true
+          description: State/Province/Region.
+          example: CA
+        street_line_1:
+          type: string
+          nullable: true
+          description: Address line 1 (Street address/PO Box).
+          example: 2311 North Los Robles Av.
+        street_line_2:
+          type: string
+          nullable: true
+          description: Address line 2 (Apartment/Suite/Unit/Building).
+          example: Apartment C
+        tax_id:
+          type: string
+          nullable: true
+          description: The contact's tax identification number. Quaderno can validate
+            EU VAT numbers, ABN, and NZBN.
+        web:
+          type: string
+          nullable: true
+          format: uri
+          description: The contact's website
+          example: https://theelevatorisbroken.com
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/contacts/92732431
+      required:
+      - first_name
+    tax_id:
+      type: object
+      description: A tax ID identifies a business in a certain tax juristiction.
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the object.
+          example: 235464
+        jurisdiction:
+          type: object
+          description: Tax jurisdiction where the tax ID is registered.
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            country:
+              type: string
+            region:
+              type: string
+        state:
+          type: string
+          enum:
+          - verified
+          - unverified
+          - unavailable
+          description: The verification status of the tax ID in the related tax agency.
+        valid_from:
+          type: string
+          description: The tax ID's validity date. Defaults to the beginning of the
+            year.
+        valid_until:
+          type: string
+          nullable: true
+          description: The tax ID's expiration date, or null if the tax ID has no
+            expiration date.
+        value:
+          type: string
+          description: Value of the tax ID. For instance, a VAT number.
+          example: IE21416127
+        created_at:
+          type: integer
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: 1632985500
+      required:
+      - id
+      - jurisdiction
+      - state
+      - valid_from
+      - valid_until
+      - created_at
+    evidence:
+      type: object
+      description: Evidence are proofs of customers' location that must be stored
+        to comply with tax rules.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        additional_evidence:
+          type: string
+          nullable: true
+          description: Additional evidence used to proof the customer's location.
+            Required if there's a `additional_evidence_country'.
+          example: Phone bill
+        additional_evidence_country:
+          type: string
+          nullable: true
+          description: 2-letter ISO 3166-1 code.
+          example: DE
+        bank_country:
+          type: string
+          nullable: true
+          description: 2-letter ISO 3166-1 code.
+          example: DE
+        billing_country:
+          type: string
+          nullable: true
+          description: 2-letter ISO 3166-1 code.
+          example: DE
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        document_id:
+          type: integer
+          description: Unique identifier for the related invoice.
+          example: 43123
+        ip_address:
+          type: string
+          nullable: true
+          description: The customer's IP address
+          example: 127.0.0.1
+        ip_country:
+          type: string
+          nullable: true
+          readOnly: true
+          description: 2-letter ISO 3166-1 code.
+          example: DE
+        notes:
+          type: string
+          nullable: true
+          description: Internal notes about the evidence.
+          example: Some private notes about the evidence.
+        state:
+          type: string
+          enum:
+          - unsettled
+          - conflicting
+          - confirmed
+          default: unsettled
+          description: State of the evidence
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/evidence/92732431
+      required:
+      - document_id
+    custom_account:
+      type: object
+      description: A Custom Quaderno Connect account is almost completely invisible
+        to the account holder. You —the platform— are responsible for all interactions
+        with your user and configure all the account's settings, including all the
+        information needed for tax calculations, programmatically.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the account.
+        business_name:
+          type: string
+          description: The name of the business associated with the account.
+        country:
+          type: string
+          description: The country where the business is located. 2-letter ISO 3166-1
+            code.
+        created_at:
+          type: integer
+          description: The date and time when the account was created.
+        currency:
+          type: string
+          description: The currency used for the account. Defaults to the country's
+            official currency.
+        default_product_type:
+          type: string
+          description: The default product type for the account. To be used when no
+            product type is specified on documents and tax calculations. Can be either
+            good or service. Defaults to service.
+        default_tax_code:
+          type: string
+          description: The default tax code for the account. To be used when no tax
+            code is specified on items and tax calculations. Can be any tax_code.
+            Defaults to eservice.
+        email:
+          type: string
+          description: The email address associated with the account.
+        local_tax_id:
+          type: string
+          description: The local tax identifier for the business. If set, the account
+            will be registered for tax collection in the country's jurisdiction.
+        state:
+          type: string
+          description: The current state of the account. Can be either active or inactive.
+        subdomain:
+          type: string
+          description: The new ACCOUNT_NAME assigned for your merchant.
+        type:
+          type: string
+          description: The type of the account. Can be either standard or custom.
+        authentication:
+          type: object
+          description: Information to act on behalf of the new account. The access_token
+            expires after 25 days, but the refresh_token does not expire on Custom
+            accounts.
+          properties:
+            token_type:
+              type: string
+              example: Bearer
+              description: Type of token used for authentication.
+            access_token:
+              type: string
+              example: xxx
+              description: Token used for authentication. Expires after 25 days.
+            refresh_token:
+              type: string
+              example: yyy
+              description: Token used to refresh the access_token. Does not expire
+                on Custom accounts.
+      required:
+      - business_name
+      - country
+      - email
+    coupon:
+      type: object
+      description: A coupon contains information about a percent-off or amount-off
+        discount you might want to apply to a customer during a checkout.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        amount_off:
+          type: number
+          format: float
+          nullable: true
+          description: Amount (in the `currency` specified) that will be taken off
+            the subtotal of the purchase. Required if `percent_off` is not passed.
+        code:
+          type: string
+          description: Coupon code
+          example: 25_5OFF
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        currency:
+          type: string
+          nullable: true
+          description: If `amount_off` has been set, the three-letter [ISO currency
+            code](https://en.wikipedia.org/wiki/ISO_4217) of the amount to take off,
+            in uppercase. Must be a supported currency in your payment processors.
+          example: USD
+        kind:
+          type: string
+          enum:
+          - amount_off
+          - percent_off
+          default: percent_off
+          description: 'The type of coupon: amount or percentage off.'
+        max_redemptions:
+          type: integer
+          nullable: true
+          description: Maximum number of times this coupon can be redeemed, in total,
+            across all customers, before it is no longer valid.
+          example: 100
+        name:
+          type: string
+          nullable: true
+          description: Name of the coupon displayed to customers on invoices.
+          example: Special offer!
+        percent_off:
+          type: number
+          format: float
+          nullable: true
+          description: Percent that will be taken off the subtotal of the purchase.
+            For example, a coupon with `percent_off` of 50 will make a $100 purchase
+            $50 instead. Required if `amount_off` is not passed.
+          example: 25.5
+        redeem_by:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which the coupon can no longer be redeemed.
+          example: '2020-07-21'
+        times_redeemed:
+          type: integer
+          nullable: true
+          default: 0
+          readOnly: true
+          description: Number of times this coupon has been applied.
+          example: 10
+      oneOf:
+      - required:
+        - code
+        - percent_off
+    session:
+      type: object
+      description: A Checkout Session represents your customer’s session as they pay
+        for one-time purchases or subscriptions through Quaderno Checkout. We recommend
+        creating a new session each time your customer attempts to pay.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        billing_details_collection:
+          type: string
+          enum:
+          - auto
+          - required
+          default: required
+          description: The value for whether Checkout collected the customer’s billing
+            address.
+        cancel_url:
+          type: string
+          format: uri
+          description: The URL the customer will be directed to if they decide to
+            cancel payment and return to your website.
+          example: https://mydomain.com/cancel
+        coupon:
+          type: object
+          "$ref": "#/components/schemas/coupon"
+          nullable: true
+          description: The session’s assigned coupon.
+        coupon_collection:
+          type: boolean
+          default: false
+          description: The value for whether Checkout collected coupons.
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        custom:
+          type: object
+          nullable: true
+          description: Set of key-value pairs that you want to forward to the payment
+            processor. This can be useful for setting up additional options in the
+            payment processor. If you want to send specific data to one processor,
+            you can create a subhash with the name of that particular processor.
+          example: 'stripe: { metadata: { user_id: 999 } }, paypal: { no_shipping:
+            0 }'
+        customer:
+          type: object
+          "$ref": "#/components/schemas/checkout_customer"
+          nullable: true
+          description: The customer’s billing information.
+        items:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/checkout_item"
+          description: The list of products being purchased.
+        locale:
+          type: string
+          enum:
+          - auto
+          - ca
+          - de
+          - en
+          - es
+          - fi
+          - fr
+          - hu
+          - it
+          - nb
+          - nl
+          - sv
+          default: auto
+          description: The 2-letter [ISO language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+            of the locale Checkout is displayed in. If `auto`, the browser’s locale
+            is used.
+        metadata:
+          type: object
+          nullable: true
+          description: Set of key-value pairs that you can attach to the session.
+            This can be useful for storing additional information about the purchase.
+        payment_methods:
+          type: array
+          items:
+            type: string
+            enum:
+            - card
+            - paypal
+          default:
+          - card
+          description: Accepted payment methods for this session.
+        permalink:
+          type: string
+          format: uri
+          description: The URL of this Checkout Session.
+          example: https://quadernoapp.com/checkout/session/53d3b70b49b6b2zs468345798bb5b2624216bbf7/init
+        processor:
+          type: string
+          nullable: true
+          description: The payment processor used to process the charge.
+          example: stripe
+        processor_id:
+          type: string
+          nullable: true
+          description: The ID the `processor` assigned to the payment.
+          example: ch_999999999999
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - failed
+          - completed
+          - abandoned
+          default: pending
+          description: "`Pending` sessions are unpaid and awaiting payment. A session
+            is marked as `failed` when the payment failed or was declined. Note that
+            this status many not show inmediately and instead show as pending until
+            verified. `Completed` sessions requires no further action and cannot be
+            edited. A session is marked as `abandoned` after being cancelled by the
+            customer or after 30 minutes without activitiy."
+        success_url:
+          type: string
+          format: uri
+          description: The URL the customer will be directed to after the payment
+            or subscription creation is successful.
+          example: https://mydomain.com/thanks
+        updatable_quantity:
+          type: boolean
+          default: false
+          description: The value for whether customers can update items’ quantities.
+      required:
+      - cancel_url
+      - items
+      - success_url
+    checkout_customer:
+      type: object
+      description: A Checkout Customer represents your customer’s data in a particular
+        Checkout Session.
+      properties:
+        billing_city:
+          type: string
+          nullable: true
+          description: City/District/Suburb/Town/Village.
+          example: Pasadena
+        billing_country:
+          type: string
+          nullable: true
+          description: 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+          example: US
+        billing_postal_code:
+          type: string
+          nullable: true
+          description: ZIP or postal code.
+          example: '91104'
+        billing_street_line_1:
+          type: string
+          nullable: true
+          description: Address line 1 (Street address/PO Box).
+          example: 2311 North Los Robles Av.
+        billing_street_line_2:
+          type: string
+          nullable: true
+          description: Address line 2 (Apartment/Suite/Unit/Building).
+          example: Apartment C
+        company:
+          type: string
+          nullable: true
+          description: The customer’s company name.
+          example: ''
+        contact:
+          type: integer
+          nullable: true
+          description: The ID of the contact who will make the purchase.
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: The customer’s email address.
+          example: leonard@gmail.com
+        first_name:
+          type: string
+          nullable: true
+          description: The customer’s first name.
+          example: Leonard
+        last_name:
+          type: string
+          nullable: true
+          description: The customer’s last name. Only for natural persons.
+          example: Hofstadter
+        tax_id:
+          type: string
+          nullable: true
+          description: The customer’s tax identification number. Quaderno can validate
+            EU VAT numbers, ABN, and NZBN.
+    checkout_item:
+      type: object
+      description: A Checkout Item represents every product being purchased in a Checkout
+        Session.
+      properties:
+        amount:
+          type: number
+          format: float
+          nullable: true
+          description: Unit price of the item being purchased.
+          example: 9.99
+        currency:
+          type: string
+          nullable: true
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase. Must be a supported currency in your payment processors.
+          example: USD
+        description:
+          type: string
+          nullable: true
+          description: The description of the item being purchased.
+        name:
+          type: string
+          nullable: true
+          description: The name of the item being purchased.
+          example: Ruby Essentials
+        product:
+          type: string
+          nullable: true
+          description: The SKU of the Quaderno `Product` being purchased.
+          example: '012345678901-MFN'
+        quantity:
+          type: integer
+          default: 1
+          description: Quantity of the item being purchased.
+          example: 1
+      required:
+      - product
+    transaction_item:
+      type: object
+      description: A transaction item represents the concept being sold or refunded.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        product_code:
+          type: string
+          description: Code of an existing product. If present, you don’t need to
+            set the description.
+          example: '012345678901-MFN'
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        description:
+          type: string
+          description: Concept being sold or refunded. Meant to be displayable to
+            the customer.
+        quantity:
+          type: number
+          format: float
+          nullable: true
+          description: Quantity of units for the transaction item. Defaults to 1.
+          example: 10.0
+        discount_rate:
+          type: number
+          format: float
+          nullable: true
+          description: This represents the discount percent out of 100 included in
+            the amount, if applicable.
+          example: 10.0
+        amount:
+          type: number
+          format: float
+          description: Total amount (in the transaction’s currency) of the transaction
+            item. This should always be equal to the amount charged after discounts
+            and taxes.
+          example: 10.0
+        tax:
+          type: object
+          "$ref": "#/components/schemas/tax_rate"
+          description: The tax rates which apply to the transaction item. Responses
+            from the tax calculation endpoint are valid input.
+      required:
+      - amount
+    transaction:
+      type: object
+      description: A transaction logs a new sale or refund in Quaderno.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        type:
+          type: string
+          enum:
+          - sale
+          - refund
+          default: sale
+          description: The transaction’s type.
+        currency:
+          type: string
+          nullable: true
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase. Defaults to the account’s default currency.
+          example: USD
+        custom_metadata:
+          type: hash
+          nullable: true
+          description: Set of key-value pairs that you can attach to an object. This
+            can be useful for storing additional information about the object in a
+            structured format. You can have up to 20 keys, with key names up to 40
+            characters long and values up to 500 characters long.
+          example: 'anything_you_want: extra info'
+        customer:
+          type: object
+          "$ref": "#/components/schemas/contact"
+          description: The data of the customer who paid the transaction. You can
+            reference an existing contact by its id, or pass the json object to create
+            a new contact.
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        date:
+          type: string
+          format: date
+          description: The transaction’s date. Defaults to today.
+        items:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/transaction_item"
+          description: The list of individual items that make up the transaction.
+        shipping_address:
+          type: object
+          description: The mailing address to where the order will be shipped. Use
+            it if the order contains physical goods.
+          properties:
+            street_line_1:
+              type: string
+            street_line_2:
+              type: string
+            city:
+              type: string
+            country:
+              type: string
+            region:
+              type: string
+            postal_code:
+              type: string
+        evidence:
+          type: object
+          "$ref": "#/components/schemas/evidence"
+          description: Evidence of the customer’s location. Highly recommended.
+        payment:
+          type: object
+          description: Detailed information about the transaction payment.
+          properties:
+            method:
+              type: string
+              enum:
+              - credit_card
+              - cash
+              - wire_transfer
+              - direct_debit
+              - check
+              - iou
+              - paypal
+              - other
+              default: other
+              description: The payment method used to pay the transaction.
+            processor:
+              type: string
+              description: The name of the payment processor used to take the payment.
+                E.g. stripe, paypal…
+            processor_id:
+              type: string
+              description: The ID of the transaction in the payment processor.
+        processor:
+          type: string
+          nullable: true
+          description: The name of the platform that processed the transaction. E.g.
+            shopify, woocommerce or any user agent you may want to use to identify
+            yourself… Recommended
+          example: my_platform_user_agent
+        processor_id:
+          type: string
+          nullable: true
+          description: 'The ID of the transaction in the processor. Reference this
+            when creating a transaction of `type: refund``, so that the resultant
+            credit note is associated to the invoice. Recommended'
+          example: my_internal_request_id
+        processor_fee_cents:
+          type: string
+          nullable: true
+          description: Processor total fee, in cents.
+          example: '1'
+        po_number:
+          type: string
+          nullable: true
+          description: The number of the related order. Recommended.
+          example: po_xxxxxxxx
+        notes:
+          type: string
+          nullable: true
+          description: Optional notes attached to the transaction.
+          example: A note.
+        tags:
+          type: string
+          nullable: true
+          description: Tags attached to the transaction, formatted as a string of
+            comma-separated values. Tags are additional short descriptors, commonly
+            used for filtering and searching. Each individual tag is limited to 40
+            characters in length
+          example: tagA, tagB
+      required:
+      - items
+      - payment
+    tax_rate:
+      type: object
+      description: A tax calculation, based on your tax settings and the customer’s
+        location.
+      properties:
+        name:
+          type: string
+          nullable: true
+          example: Sales tax
+        rate:
+          type: number
+          format: float
+          example: 8.875
+        taxable_part:
+          type: number
+          nullable: true
+          format: float
+          example: 100.0
+        country:
+          type: string
+          example: US
+        region:
+          type: string
+          nullable: true
+          example: NY
+        county:
+          type: string
+          nullable: true
+          example: NEW YORK
+        city:
+          type: string
+          nullable: true
+          example: NEW YORK
+        tax_code:
+          type: string
+          example: eservice
+        tax_behavior:
+          type: string
+          nullable: true
+          example: eservice
+        tax_amount:
+          type: number
+          nullable: true
+          example: 100.0
+        subtotal:
+          type: number
+          nullable: true
+          example: 100.0
+        total_amount:
+          type: number
+          nullable: true
+          example: 100.0
+        status:
+          type: string
+          nullable: true
+          enum:
+          - taxable
+          - non_taxable
+          - not_registered
+          - reverse_charge
+          example: not_registered
+        notes:
+          type: string
+          nullable: true
+          example: ''
+        notice:
+          type: string
+          nullable: true
+          example: ''
+      required:
+      - rate
+      - country
+      - tax_code
+    invoice:
+      type: object
+      description: Invoices are statements of amounts owed by a customer, and are
+        either generated one-off, or generated periodically from a recurring.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        created_at:
+          oneOf:
+          - type: string
+          - type: integer
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          readOnly: true
+          example: '1593260908'
+        number:
+          type: string
+          description: A unique, sequential code that identifies the invoice. Legally,
+            an invoice number sequence should never contain repeats or gaps. Automatic
+            numbering is used by default.
+          example: '00001'
+        issue_date:
+          type: string
+          format: date
+          description: The date of the invoice’s issue - not necessarily the date
+            the products or services were provided.
+          example: '2020-06-27'
+        related_document:
+          type: object
+          description: On credit notes that cancel out an invoice, the related invoice.
+          properties:
+            id:
+              type: integer
+              description: Unique identifier for the object.
+              readOnly: true
+              example: 92732430
+            type:
+              type: string
+              description: Type of the related document.
+              readOnly: true
+              example: Recurring
+        po_number:
+          type: string
+          nullable: true
+          description: Purchase order number.
+          example: '999'
+        due_date:
+          type: string
+          format: date
+          nullable: true
+          description: The date on which payment for this invoice is due.
+          example: '2020-07-27'
+        currency:
+          type: string
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase.
+          example: USD
+        recurring_period:
+          type: string
+          nullable: true
+          enum:
+          - days
+          - weeks
+          - months
+          - years
+          description: Recurring period. Can be `days`, `weeks`, `months`, `years`.
+        recurring_frequency:
+          type: number
+          nullable: true
+          description: Recurring frequency.
+        tag_list:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Multiple tags should be separated by commas.
+          example: consulting, premium
+        payment_details:
+          type: string
+          nullable: true
+          description: Detailed information about the accepted payment methods.
+        notes:
+          type: string
+          nullable: true
+          description: Extra notes about the invoice.
+        contact:
+          type: object
+          "$ref": "#/components/schemas/contact"
+          description: Customer who will be billed.
+        country:
+          type: string
+          description: The customer’s billing country. 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+          example: US
+        postal_code:
+          type: string
+          nullable: true
+          description: The customer’s billing ZIP or postal code.
+          example: '91104'
+        region:
+          type: string
+          nullable: true
+          description: The customer’s billing state/province/region.
+          example: CA
+        street_line_1:
+          type: string
+          nullable: true
+          description: The customer’s billing address line 1 (Street address/PO Box).
+          example: 2311 North Los Robles Av.
+        street_line_2:
+          type: string
+          nullable: true
+          description: The customer’s billing address line 2 (Apartment/Suite/Unit/Building).
+          example: Apartment C
+        tax_id:
+          type: string
+          nullable: true
+          description: The customer’s tax identification number.
+        subject:
+          type: string
+          nullable: true
+          description: ''
+        items:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_item"
+          description: The individual line items that make up the invoice. No more
+            than 200 items are allowed in a request. To add more use subsequent update
+            requests. Maximum items per document are limited up to 1000 items.
+        taxes:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_tax"
+          description: An array of tax line objects, each of which details a tax applicable
+            to the invoice.
+        payments:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/payment"
+          description: Array of all payments on this invoice, if applicable.
+        evidence:
+          type: object
+          "$ref": "#/components/schemas/evidence"
+          description: Location evidence used to calculate the invoice’s tax, if applicable.
+        payment_processor:
+          type: string
+          nullable: true
+          description: The payment processor used to process the invoice.
+          example: stripe
+        payment_processor_id:
+          type: string
+          nullable: true
+          description: The ID the `payment_processor` assigned to the invoice.
+          example: ch_999999999999
+        custom_metadata:
+          type: object
+          nullable: true
+          description: Set of key-value pairs that you can attach to an object. This
+            can be useful for storing additional information about the object in a
+            structured format.
+        exchange_rate:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: The exchange rate used, if applicable, to this invoice.
+          example: 0.680309
+        subtotal_cents:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: Total of all invoice items on the invoice before any discount
+            or tax is applied.
+          example: 9375
+        discount_cents:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: Current discount applied to this invoice, if there is one.
+          example: 0
+        total_cents:
+          type: integer
+          readOnly: true
+          description: Total after discounts and taxes.
+          example: 9375
+        state:
+          type: string
+          enum:
+          - outstanding
+          - late
+          - uncollectible
+          - paid
+          - refunded
+          - archived
+          default: outstanding
+          readOnly: true
+          description: The status of the invoice.
+        permalink:
+          type: string
+          format: uri
+          description: The URL for the hosted invoice page, which allows customers
+            to view and pay an invoice.
+          readOnly: true
+          example: https://quadernoapp.com/invoice/123345abcdef67890
+        pdf:
+          type: string
+          format: uri
+          description: The URL of the PDF version of the invoice.
+          readOnly: true
+          example: https://quadernoapp.com/invoice/123345abcdef67890.pdf
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/invoice/92732431
+      required:
+      - contact
+      - items
+    document_item:
+      type: object
+      description: ''
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        description:
+          type: string
+          description: An arbitrary string attached to the object. Often useful for
+            displaying to users.
+          example: Ruby Essentials
+        subtotal_cents:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: Gross price before any discount or tax is applied.
+          example: 9375
+        discount_cents:
+          oneOf:
+          - type: string
+          - type: integer
+        discount_rate:
+          oneOf:
+          - type: string
+          - type: integer
+          nullable: true
+          description: Discount percent out of 100, if applicable.
+          example: 25.5
+        quantity:
+          oneOf:
+          - type: number
+            format: float
+          - type: string
+          default: 1.0
+          description: Quantity of the product being invoiced.
+          example: 2.0
+        product_code:
+          type: string
+          nullable: true
+          description: The SKU of the Quaderno `Product` being invoiced. Use this
+            attribute if you want to track your sales per product.
+          example: '012345678901-MFN'
+        tax_1_transaction_type:
+          type: string
+          enum:
+          - consulting
+          - eservice
+          - ebook
+          - saas
+          - standard
+          - reduced
+          description: Type of transaction
+          example: eservice
+        tax_1_country:
+          type: string
+          nullable: true
+          description: Tax country, if applicable
+          example: CA
+        tax_1_name:
+          type: string
+          nullable: true
+          description: Name of the tax, if applicable
+          example: GST
+        tax_1_rate:
+          type: number
+          format: float
+          nullable: true
+          description: Rate of the tax, if applicable
+          example: 5.0
+        tax_1_region:
+          type: string
+          nullable: true
+          description: Tax region, if applicable. Only for US sales tax and Canada
+            GST.
+          example: BC
+        tax_2_transaction_type:
+          type: string
+          enum:
+          - consulting
+          - eservice
+          - ebook
+          - saas
+          - standard
+          - reduced
+          description: Additional type of transaction
+          example: eservice
+        tax_2_country:
+          type: string
+          nullable: true
+          description: Additional tax country, if applicable
+          example: CA
+        tax_2_name:
+          type: string
+          nullable: true
+          description: Additional name of the tax, if applicable
+          example: GST
+        tax_2_rate:
+          type: number
+          format: float
+          nullable: true
+          description: Additional rate of the tax, if applicable
+          example: 5.0
+        tax_2_region:
+          type: string
+          nullable: true
+          description: Additional tax region, if applicable. Only for US sales tax
+            and Canada GST.
+          example: BC
+        total_amount:
+          type: number
+          format: float
+          description: The total amount to be charged after discounts and taxes. Required
+            if `unit_price` is not passed.
+          example: 19.98
+        unit_price:
+          type: number
+          format: float
+          description: The unit price of the item before any discount or tax is applied.
+            Required if `total_amount` is not passed.
+          example: 9.99
+    document_tax:
+      type: object
+      description: The taxes associated with the invoice.
+      properties:
+        label:
+          type: string
+          nullable: true
+          description: Name of the tax applied
+        rate:
+          type: number
+          format: float
+          default: 0
+          description: The rate of tax applied.
+        country:
+          type: string
+          description: Tax country
+          example: CA
+        region:
+          type: string
+          nullable: true
+          description: Tax state/province. Only for US sales tax and Canada GST.
+          example: BC
+        county:
+          type: string
+          nullable: true
+          description: Tax county. Only for US sales tax.
+        transaction_type:
+          type: string
+          enum:
+          - consulting
+          - eservice
+          - ebook
+          - saas
+          - standard
+          - reduced
+          nullable: true
+          description: Type of transaction
+          example: eservice
+        amount_cents:
+          type: integer
+          description: Tax amount in cents.
+          example: 1000
+    payment:
+      type: object
+      description: The payment associated with the invoice.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        amount_cents:
+          type: number
+          format: float
+          description: Paid amount.
+          example: 56.6
+        created_at:
+          type: integer
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '1593260908'
+        date:
+          type: string
+          format: date
+          nullable: true
+          description: Default is current date.
+          example: '2020-06-27'
+        payment_method:
+          type: string
+          enum:
+          - credit_card
+          - cash
+          - wire_transfer
+          - direct_debit
+          - check
+          - iou
+          - paypal
+          - other
+          - credit
+          nullable: true
+          description: ''
+          example: credit_card
+        payment_processor:
+          type: string
+          nullable: true
+          description: The payment processor used to process the payment.
+          example: stripe
+        payment_processor_id:
+          type: string
+          nullable: true
+          description: The ID the `payment_processor` assigned to the payment.
+          example: ch_999999999999
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/payments/92732431
+    credit:
+      type: object
+      description: Credit notes are official legal documents used to notify your customer
+        that credit is being applied.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        created_at:
+          oneOf:
+          - type: string
+          - type: integer
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          readOnly: true
+          example: '1593260908'
+        number:
+          type: string
+          description: A unique, sequential code that identifies the document. Legally,
+            a credit note number sequence should never contain repeats or gaps. Automatic
+            numbering is used by default.
+          example: '00001'
+        issue_date:
+          type: string
+          format: date
+          description: The date when the credit was issued.
+          example: '2020-06-27'
+        related_document:
+          type: object
+          description: On credit notes that cancel out an invoice, the related invoice.
+          properties:
+            id:
+              type: integer
+              description: Unique identifier for the object.
+              readOnly: true
+              example: 92732430
+            type:
+              type: string
+              description: Type of the related document.
+              readOnly: true
+              example: Recurring
+        po_number:
+          type: string
+          nullable: true
+          description: Purchase order number.
+          example: '999'
+        due_date:
+          type: string
+          format: date
+          nullable: true
+          description: The date on which payment for this document is due.
+          example: '2020-07-27'
+        currency:
+          type: string
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase.
+          example: USD
+        tag_list:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Multiple tags should be separated by commas.
+          example: consulting, premium
+        notes:
+          type: string
+          nullable: true
+          description: Extra notes about the document.
+        contact:
+          type: object
+          "$ref": "#/components/schemas/contact"
+          description: Customer who will be credited.
+        country:
+          type: string
+          description: The customer’s billing country. 2-letter [ISO country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+          example: US
+        postal_code:
+          type: string
+          nullable: true
+          description: The customer’s billing ZIP or postal code.
+          example: '91104'
+        region:
+          type: string
+          nullable: true
+          description: The customer’s billing state/province/region.
+          example: CA
+        street_line_1:
+          type: string
+          nullable: true
+          description: The customer’s billing address line 1 (Street address/PO Box).
+          example: 2311 North Los Robles Av.
+        street_line_2:
+          type: string
+          nullable: true
+          description: The customer’s billing address line 2 (Apartment/Suite/Unit/Building).
+          example: Apartment C
+        tax_id:
+          type: string
+          nullable: true
+          description: The customer’s tax identification number.
+        subject:
+          type: string
+          nullable: true
+          description: ''
+        items:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_item"
+          description: The individual line items that make up the credit note. No
+            more than 200 items are allowed in a request. To add more use subsequent
+            update requests. Maximum items per document are limited up to 1000 items.
+        taxes:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_tax"
+          description: An array of tax line objects, each of which details a tax applicable
+            to the credit note.
+        payments:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/payment"
+          description: Array of all payments on this credit note, if applicable.
+        payment_processor:
+          type: string
+          nullable: true
+          description: The payment processor used to process the credit note.
+          example: stripe
+        payment_processor_id:
+          type: string
+          nullable: true
+          description: The ID the `payment_processor` assigned to the credit note.
+          example: ch_999999999999
+        custom_metadata:
+          type: object
+          nullable: true
+          description: Set of key-value pairs that you can attach to an object. This
+            can be useful for storing additional information about the object in a
+            structured format.
+        exchange_rate:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: The exchange rate used, if applicable, to this credit note.
+          example: 0.680309
+        subtotal_cents:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: Total of all items before any discount or tax is applied.
+          example: 9375
+        discount_cents:
+          oneOf:
+          - type: string
+          - type: integer
+          readOnly: true
+          description: Current discount applied, if there is one.
+          example: 0
+        total_cents:
+          type: integer
+          readOnly: true
+          description: Total after discounts and taxes.
+          example: 9375
+        state:
+          type: string
+          enum:
+          - outstanding
+          - late
+          - paid
+          - void
+          - archived
+          default: outstanding
+          readOnly: true
+          description: The status of the credit note.
+        permalink:
+          type: string
+          format: uri
+          description: The URL for the hosted credit note page.
+          readOnly: true
+          example: https://quadernoapp.com/credit/123345abcdef67890
+        pdf:
+          type: string
+          format: uri
+          description: The URL of the PDF version of the credit note.
+          readOnly: true
+          example: https://quadernoapp.com/credit/123345abcdef67890.pdf
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/credit/92732431
+      required:
+      - contact
+      - items
+    recurring:
+      type: object
+      description: Recurring are special documents that periodically renew themselves,
+        generating an invoice or and expense.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        start_date:
+          type: string
+          format: date
+          description: Date of the issue of the first document for this recurring.
+            Defaults to 1 months from today.
+          example: '2023-01-27'
+        end_date:
+          type: string
+          nullable: true
+          format: date
+          description: Date of the issue of the last document for this recurring.
+          example: '2024-01-27'
+        frequency:
+          type: string
+          enum:
+          - daily
+          - weekly
+          - biweekly
+          - monthly
+          - bimonthly
+          - quarterly
+          - semiyearly
+          - yearly
+          - biyearly
+          default: monthly
+          description: Recurring frequency.
+        due_days:
+          type: string
+          format: date
+          nullable: true
+          description: The date on which payment for this recurring is due.
+          example: '2020-07-27'
+        po_number:
+          type: string
+          nullable: true
+          description: Purchase order number.
+          example: '999'
+        currency:
+          type: string
+          description: Three-letter [ISO currency code](https://en.wikipedia.org/wiki/ISO_4217),
+            in uppercase.
+          example: USD
+        tag_list:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Multiple tags should be separated by commas.
+          example: consulting, premium
+        payment_details:
+          type: string
+          nullable: true
+          description: Detailed information about the accepted payment methods.
+        notes:
+          type: string
+          nullable: true
+          description: Extra notes about the recurring.
+        contact:
+          type: object
+          "$ref": "#/components/schemas/contact"
+          description: Customer who will be billed.
+        subject:
+          type: string
+          nullable: true
+          description: ''
+        items:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_item"
+          description: The individual line items that make up the recurring. No more
+            than 200 items are allowed in a request. To add more use subsequent update
+            requests. Maximum items per document are limited up to 1000 items.
+        taxes:
+          type: array
+          items:
+            type: object
+            "$ref": "#/components/schemas/document_tax"
+          description: An array of tax line objects, each of which details a tax applicable
+            to the recurring.
+        custom_metadata:
+          type: object
+          nullable: true
+          description: Set of key-value pairs that you can attach to an object. This
+            can be useful for storing additional information about the object in a
+            structured format.
+        total_cents:
+          type: integer
+          readOnly: true
+          description: Total after discounts and taxes.
+          example: 9375
+        state:
+          type: string
+          enum:
+          - active
+          - archived
+          default: active
+          readOnly: true
+          description: The status of the recurring.
+        url:
+          type: string
+          format: uri
+          description: URI of the object
+          readOnly: true
+          example: https://quadernoapp.com/api/recurring/92732431
+      required:
+      - contact
+      - items
+    webhook:
+      type: object
+      description: Webhooks allow to be notified about events that happen in your
+        Quaderno account. They can be created from the dashboard or via API.
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the object.
+          readOnly: true
+          example: 92732431
+        auth_key:
+          type: string
+          readOnly: true
+          description: The endpoint's secret, used to generate webhook signatures.
+          example: zXQgArTtQxAMaYppMrDoUQ
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the object was created. Measured in seconds since
+            the Unix epoch.
+          example: '2023-01-24T10:59:15.000Z'
+        events_sent:
+          type: integer
+          nullable: true
+          readOnly: true
+          description: Number of events delivered to the endpoint.
+          example: 0
+        events_types:
+          type: array
+          items:
+            type: string
+          description: The list of events to enable for this endpoint.
+          example:
+          - invoice.created
+          - credit.created
+        last_error:
+          type: string
+          nullable: true
+          readOnly: true
+          description: Description of the last error returned by the endpoint.
+          example: Response code 503 returned.
+        last_error_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+          description: Time at which the endpoint returned the last error.
+          example: '2023-01-24T10:59:15.000Z'
+        last_sent_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+          description: Time at which the events were delivered for the last time.
+          example: '2023-01-24T10:59:15.000Z'
+        url:
+          type: string
+          format: uri
+          description: The URL of the webhook endpoint.
+          example: https://myawesomeapp.com/notifications
+      required:
+      - events_types
+      - url
+    attachment:
+      type: object
+      description: Invoices and expenses can have attached files.
+      properties:
+        data:
+          type: string
+          description: File data enconded in base64.
+        filename:
+          type: string
+          description: Name of the attached file.
+          example: ticket.jpeg
+        public:
+          type: boolean
+          description: Visibility of attached file. Public attachments can be seen
+            and downloaded by customers.
+          default: false
+          example: true
+      required:
+      - data
+      - filename
+  securitySchemes:
+    basic_auth:
+      type: http
+      scheme: basic
+security:
+- basic_auth: []
